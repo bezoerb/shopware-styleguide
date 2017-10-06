@@ -1,0 +1,84 @@
+@font-size-base: 14;
+
+
+.sg-styleguide {
+  color: #333;
+  font-size: 16px;
+
+  svg {
+    max-width: 100%;
+  }
+
+  hr {
+
+    height: 1px;
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+}
+
+.sg-styleguide__section {
+  border-top: 1px solid #ccc;
+  margin-bottom: 3rem;
+
+  > h2 {
+    margin: 0;
+    line-height: 40px;
+    margin-bottom: 2rem;
+  }
+}
+
+
+/**
+ * Styleguide component
+ */
+.sg-layout__item,
+.sg-component {
+  svg {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+.sg-component__code,
+.sg-component__component {
+  margin-bottom: 1rem;
+}
+
+.sg-component__doc {
+  ul, ol {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.sg-component__preview {
+
+
+}
+
+
+.sg-component__doc {
+  font-size: 14px;
+  p, pre {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  pre {
+    margin-bottom: 0.5rem;
+  }
+}
+
+
+
+/*
+Section styling (required)
+Removes hidden sections from the keychain.
+Only used when JavaScript is available.
+*/
+[role="tabpanel"][aria-hidden="true"] {
+  display: none;
+}
+

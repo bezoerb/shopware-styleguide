@@ -1,0 +1,10 @@
+{
+    "name": "bezoerb/styleguide",
+    "authors": [
+        {
+            "name": "Ben Zörb",
+            "email": "ben@sommerlaune.com"
+        }
+    ],
+    "require": {}
+}

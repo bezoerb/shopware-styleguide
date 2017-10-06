@@ -1,0 +1,135 @@
+
+/* ==========================================================================
+   #FLAG
+   ========================================================================== */
+
+/**
+ * The flag object is a design pattern similar to the media object, however it
+ * utilises `display: table[-cell];` to give us control over the vertical
+ * alignments of the text and image.
+ *
+ * http://csswizardry.com/2013/05/the-flag-object/
+ *
+ * 1. Allows us to control vertical alignments.
+ * 2. Force the object to be the full width of its parent. Combined with [1],
+ *    this makes the object behave in a quasi-`display: block;` manner.
+ * 3. Reset inherited `border-spacing` declarations.
+ */
+
+.sg-flag {
+  display: flex; /* [1] */
+  flex-direction: column;
+  width: 100%; /* [2] */
+  border-spacing: 0; /* [3] */
+
+  @media (min-width: 48rem) {
+    display: table; /* [1] */
+  }
+}
+
+
+/**
+ * Items within a flag object. There should only ever be one of each.
+ *
+ * 1. Default to aligning content to their middles.
+ */
+
+.sg-flag__img,
+.sg-flag__body {
+  display: table-cell;
+  vertical-align: middle; /* [1] */
+}
+
+
+/**
+ * Flag images have a space between them and the body of the object.
+ *
+ * 1. Force `.flag__img` to take up as little space as possible:
+ *    https://pixelsvsbytes.com/2012/02/this-css-layout-grid-is-no-holy-grail/
+ */
+
+.sg-flag__img {
+  position: relative;
+  width: 1px; /* [1] */
+  text-align: left;
+  .unitize(padding-right, 24);
+  .unitize(padding-left, 24);
+
+  @media (min-width: 48em) {
+    text-align: right;
+    padding-left: 0;
+  }
+
+  /**
+   * 1. Fixes problem with images disappearing.
+   */
+
+  > img {
+    max-width: none; /* [1] */
+  }
+
+}
+
+
+/**
+ * The container for the main content of the flag object.
+ *
+ * 1. Forces the `.flag__body` to take up all remaining space.
+ */
+
+.sg-flag__body {
+  width: auto; /* [1] */
+  .unitize(padding-left, 24);
+  .unitize(padding-right, 24);
+  @media (min-width: 48rem) {
+    padding-right: 0;
+  }
+}
+
+.sg-flag--fixed {
+  > .sg-flag__img {
+    min-width: 100px;
+  }
+}
+
+.sg-flag--divided {
+  @media (min-width: 48rem) {
+    > .sg-flag__img:after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      content:'';
+      border-right: 1px solid #ccc;
+      top: 0;
+    }
+  }
+}
+
+/* Alignment variants.
+   ========================================================================== */
+
+/**
+ * Vertically align the image- and body-content differently. Defaults to middle.
+ */
+
+.sg-flag--top {
+
+  > .sg-flag__img,
+  > .sg-flag__body {
+    vertical-align: top;
+  }
+
+}
+
+
+.sg-flag--bottom {
+
+  > .sg-flag__img,
+  > .sg-flag__body {
+    vertical-align: bottom;
+  }
+
+}
+
+
