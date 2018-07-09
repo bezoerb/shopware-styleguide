@@ -5,7 +5,7 @@
 {/block}
 
 
-{block name="frontend_styleguide_section_copy"}
+{block name="frontend_styleguide_section_description"}
   {block name="frontend_styleguide_base_fonts_init"}
     {if !$fonts || !$fonts|@count}
       {$fonts = ['demo' => "'Open Sans', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"]}

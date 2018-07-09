@@ -6,7 +6,7 @@
   {/block}
 {/block}
 
-{block name="frontend_styleguide_section_copy"}
+{block name="frontend_styleguide_section_description"}
   {block name="frontend_styleguide_component_alert_copy"}
     {s name="copy" namespace="frontend/styleguide/components/alerts"}{/s}
   {/block}

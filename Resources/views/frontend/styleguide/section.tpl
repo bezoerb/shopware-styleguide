@@ -9,7 +9,7 @@
       <h2 id="{$href}" class="sg-h2"><a href="#{$href}">{$title}</a></h2>
     {/if}
     {capture assign="copy"}
-      {block name="frontend_styleguide_section_copy"}{/block}
+      {block name="frontend_styleguide_section_description"}{/block}
     {/capture}
     {if $copy}
       <div class="sg-p">{$copy}</div>

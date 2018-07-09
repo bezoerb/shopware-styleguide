@@ -4,7 +4,7 @@
   {s name="headline" namespace="frontend/styleguide/base/typography"}Typography{/s}
 {/block}
 
-{block name="frontend_styleguide_section_copy"}
+{block name="frontend_styleguide_section_description"}
   {s name="copy" namespace="frontend/styleguide/base/typography"}{/s}
 {/block}
 
