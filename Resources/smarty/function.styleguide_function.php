@@ -9,127 +9,118 @@
  */
 function smarty_function_styleguide_function($params, $template)
 {
-    if (empty($params['function'])) {
+    if (empty($params['name'])) {
         return false;
     }
 
     $params = array_merge([
-        'styleguide-preview' => true,
-        'styleguide-doc' => true,
-        'styleguide-html' => false,
-        'styleguide-smarty' => true,
-        'assign' => false,
+        'preview'   => true,
+        'doc'       => true,
+        'html'      => true,
+        'smarty'    => true,
+        'variation' => '',
+        'arguments' => [],
+        'assign'    => false,
     ], $params);
 
-    $assign = $params['assign'];
-    $showPreview = $params['styleguide-preview'];
-    $showDoc = $params['styleguide-doc'];
-    $showHtml = $params['styleguide-html'];
-    $showSmarty = $params['styleguide-smarty'];
-    $functionName = $params['function'];
-    $function = 'smarty_function_'.$params['function'];
+    $function = 'smarty_function_'.$params['name'];
 
-    unset($params['assign']);
-    unset($params['function']);
-    unset($params['styleguide-preview']);
-    unset($params['styleguide-doc']);
-    unset($params['styleguide-html']);
-    unset($params['styleguide-smarty']);
+    try {
+        $template->smarty->loadPlugin($function);
+    } catch (\SmartyException $e) {
+        return 'Error: '.$e->getMessage();
+    }
 
-    $template->smarty->loadPlugin($function);
+    // check for single arguments array and make an array of argument arrays
+    $arguments = $params['arguments'];
+    if (array_values($arguments) !== $arguments) {
+        $arguments = [$arguments];
+    }
+
 
     // params for output tpl
-    $templateParams = [];
+    $templateParams = ['variation' => $params['variation']];
 
     // prepare smarty output
-    if ($showSmarty) {
-        $includeParams = [$function];
-        foreach ($params as $key => $value) {
-            if (is_string($value)) {
-                $includeParams[] = $key.'="'.$value.'"';
-            } elseif (is_numeric($value)) {
-                $includeParams[] = $key.'='.$value;
-            } else {
-                $includeParams[] = $key.'=$'.$key;
+    if ($params['smarty']) {
+        $includeParams = [];
+        $templateParams['source'] = [];
+        foreach ($arguments as $index => $args) {
+            $includeParams[$index] = [];
+            foreach ($args as $key => $value) {
+                if ($key == 'assign') {
+                    continue;
+                }
+                if (is_string($value)) {
+                    $includeParams[$index][] = $key.'="'.$value.'"';
+                } elseif (is_numeric($value)) {
+                    $includeParams[$index][] = $key.'='.$value;
+                } elseif (is_array($value)) {
+                    $val = var_export($value, true);
+                    $val = preg_replace('/array\s*\(\s*/', '[', $val);
+                    $val = preg_replace('/\s*,\s*\)/', ']', $val);
+
+                    $keys = array_keys($value);
+                    if (array_keys($keys) == $keys) {
+                        $val = preg_replace('/\d+\s*=>\s*/', '', $val);
+                    }
+                    $includeParams[$index][] = $key.'='.$val;
+                } else {
+                    $includeParams[$index][] = $key.'=$'.$key;
+                }
             }
+
+            $templateParams['source'][] = sprintf('{%s}', implode(' ', $includeParams[$index]));
         }
-        $templateParams['source'] = sprintf('{%s}', implode(' ', $includeParams));
     }
-
-
 
     // prepare preview output
-    if ($showPreview || $showHtml) {
-        $html = $function($params, $template);
-        if ($showPreview) {
-            $templateParams['preview'] = trim($html);
-        }
+    if ($params['preview'] || $params['html']) {
+        $templateParams['preview'] = [];
+        $templateParams['html'] = [];
+        foreach ($arguments as $index => $args) {
+            try {
+                $html = $function($args, $template);
+            } catch (\Exception $e) {
+                $html = 'Error: '.$e->getMessage();
+            }
 
-        if ($showHtml) {
-            $templateParams['html'] = htmlentities(trim($html));
+            if ($html && $params['preview']) {
+                $templateParams['preview'][] = trim($html);
+            }
+
+            if ($html && $params['html']) {
+                $markup = htmlentities(trim($html));
+                $templateParams['html'][] = $markup;
+            }
         }
     }
 
-    if ($showDoc) {
-        // Fetch documentation from reflection
-        $refFunc = new ReflectionFunction($function);
-        $doc = $refFunc->getDocComment();
 
+    if ($params['doc']) {
+        try {
+            // Fetch documentation from reflection
+            $refFunc = new ReflectionFunction($function);
+            $doc = $refFunc->getDocComment();
+            $template->smarty->loadPlugin('smarty_function_styleguide_doc');
+            $templateParams['description'] = smarty_function_styleguide_doc(['source' => $doc], $template);
 
-        $template->smarty->loadPlugin('smarty_function_styleguide_doc');
-        $templateParams['description'] = smarty_function_styleguide_doc(['source' => $doc], $template);
-
-
-
-
-        /*
-         * Get file based on Smarty.class.php loadPlugin
-         */
-        // Plugin name is expected to be: Smarty_[Type]_[Name]
-//        $_plugin_filename = 'function.'.$functionName.'.php';
-//        $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
-//
-//        $docFile = '';
-//
-//        // loop through plugin dirs and find the plugin
-//        foreach($template->smarty->getPluginsDir() as $_plugin_dir) {
-//            $names = array(
-//                $_plugin_dir . $_plugin_filename,
-//                $_plugin_dir . strtolower($_plugin_filename),
-//            );
-//            foreach ($names as $file) {
-//                if (file_exists($file)) {
-//                    $docFile = $file;
-//                    break(2);
-//                }
-//
-//                if ($template->smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_plugin_dir)) {
-//                    // try PHP include_path
-//                    if ($_stream_resolve_include_path) {
-//                        $file = stream_resolve_include_path($file);
-//                    } else {
-//                        $file = Smarty_Internal_Get_Include_Path::getIncludePath($file);
-//                    }
-//
-//                    if ($file !== false) {
-//                        $docFile = $file;
-//                        break(2);
-//                    }
-//                }
-//            }
-//        }
-//
-//        $template->smarty->loadPlugin('smarty_function_styleguide_doc');
-//        $templateParams['description'] = smarty_function_styleguide_doc(['source' => $docFile], $template);
+        } catch (\Exception $e) {
+            $templateParams['description'] = 'Error: '.$e->getMessage();
+        }
     }
 
-    $renderer = clone $template;
-    $renderer->clearAllAssign();
-    $renderer->assign($templateParams);
-    $result = trim($renderer->fetch('frontend/styleguide/component.tpl'));
+    try {
+        $renderer = clone $template;
+        $renderer->clearAllAssign();
+        $renderer->assign($templateParams);
+        $result = trim($renderer->fetch('frontend/styleguide/component.tpl'));
+    } catch (\Exception $e) {
+        $result = 'Error: '.$e->getMessage();
+    }
 
-    if (!empty($assign)) {
-        $template->assign($assign, $result);
+    if (!empty($params['assign'])) {
+        $template->assign($params['assign'], $result);
         return '';
     } else {
         return $result;

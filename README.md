@@ -1,9 +1,7 @@
 # Shopware Styleguide
 [![Software License][license-image]][license-url]
 
-Easily add a living styleguide for your [`shopware`](https://github.com/shopware/shopware) project.
-
-**This ist still Work in Progress**
+Easily add a living styleguide for your [`shopware`](https://github.com/shopware/shopware) project
 
 ## Documentation
 

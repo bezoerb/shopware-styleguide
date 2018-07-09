@@ -16,18 +16,13 @@ function smarty_function_styleguide_include($params, $template)
     }
 
     $params = array_merge([
-        'styleguide-preview' => true,
-        'styleguide-doc' => true,
-        'styleguide-html' => false,
-        'styleguide-smarty' => true,
-        'assign' => false,
+        'preview'   => true,
+        'doc'       => true,
+        'html'      => true,
+        'smarty'    => true,
+        'arguments' => [],
+        'assign'    => false,
     ], $params);
-
-    $assign = $params['assign'];
-    $showPreview = $params['styleguide-preview'];
-    $showDoc = $params['styleguide-doc'];
-    $showHtml = $params['styleguide-html'];
-    $showSmarty = $params['styleguide-smarty'];
 
     if ($params['file'] instanceof Component) {
         $input = $params['file']->getFile();
@@ -35,57 +30,100 @@ function smarty_function_styleguide_include($params, $template)
         $input = $params['file'];
     }
 
-    unset($params['file']);
-    unset($params['styleguide-preview']);
-    unset($params['styleguide-doc']);
-    unset($params['styleguide-html']);
-    unset($params['styleguide-smarty']);
-
+    // check for single arguments array and make an array of argument arrays
+    $arguments = $params['arguments'];
+    if (array_values($arguments) !== $arguments) {
+        $arguments = [$arguments];
+    }
 
     // params for output tpl
     $templateParams = [];
 
     // prepare smarty output
-    if ($showSmarty) {
+    if ($params['smarty']) {
         $includeParams = [];
-        foreach ($params as $key => $value) {
-            if (is_string($value)) {
-                $includeParams[] = $key.'="'.$value.'"';
-            } elseif (is_numeric($value)) {
-                $includeParams[] = $key.'='.$value;
-            } else {
-                $includeParams[] = $key.'=$'.$key;
+        $templateParams['source'] = [];
+        foreach ($arguments as $index => $args) {
+            $includeParams[$index] = [];
+            foreach ($args as $key => $value) {
+                if ($key == 'assign') {
+                    continue;
+                }
+                if (is_string($value)) {
+                    $includeParams[$index][] = $key.'="'.$value.'"';
+                } elseif (is_numeric($value)) {
+                    $includeParams[$index][] = $key.'='.$value;
+                } elseif (is_array($value)) {
+                    $val = var_export($value, true);
+                    $val = preg_replace('/array\s*\(\s*/', '[', $val);
+                    $val = preg_replace('/\s*,\s*\)/', ']', $val);
+
+                    $keys = array_keys($value);
+                    if (array_keys($keys) == $keys) {
+                        $val = preg_replace('/\d+\s*=>\s*/', '', $val);
+                    }
+                    $includeParams[$index][] = $key.'='.$val;
+                } else {
+                    $includeParams[$index][] = $key.'=$'.$key;
+                }
             }
+
+            $templateParams['source'][] = sprintf(
+                '{include file="%s" %s}',
+                $input,
+                implode(' ', $includeParams[$index])
+            );
         }
-        $templateParams['source'] = sprintf('{include file="%s" %s}', $input, implode(' ', $includeParams));
     }
 
     // prepare preview output
-    if ($showPreview || $showHtml) {
-        $template->assign($params);
-        if ($data = trim($template->fetch($input))) {
-            if ($showPreview) {
-                $templateParams['preview'] = $data;
+    if ($params['preview'] || $params['html']) {
+        $templateParams['preview'] = [];
+        $templateParams['html'] = [];
+        foreach ($arguments as $index => $args) {
+            $renderer = clone $template;
+            $renderer->clearAllAssign();
+            $renderer->assign($args);
+
+            try {
+                $data = trim($renderer->fetch($input));
+            } catch (\Exception $e) {
+                $data = 'Error: '.$e->getMessage();
             }
 
-            if ($showHtml) {
-                $templateParams['html'] = htmlentities($data);;
+            if ($data && $params['preview']) {
+                $templateParams['preview'][] = trim($data);
+            }
+
+            if ($data && $params['html']) {
+                $markup = htmlentities(trim($data));
+                $templateParams['html'][] = $markup;
             }
         }
     }
 
-    if ($showDoc) {
-        $template->smarty->loadPlugin('smarty_function_styleguide_doc');
-        $templateParams['description'] = smarty_function_styleguide_doc(['file' => $input], $template);
+    if ($params['doc']) {
+        try {
+            $template->smarty->loadPlugin('smarty_function_styleguide_doc');
+            $templateParams['description'] = smarty_function_styleguide_doc(['file' => $input], $template);
+        } catch (\SmartyException $e) {
+            $templateParams['description'] = 'Error: '.$e->getMessage();
+        }
+
     }
 
-    $renderer = clone $template;
-    $renderer->clearAllAssign();
-    $renderer->assign($templateParams);
-    $result = trim($renderer->fetch('frontend/styleguide/component.tpl'));
 
-    if (!empty($assign)) {
-        $template->assign($assign, $result);
+    try {
+        $renderer = clone $template;
+        $renderer->clearAllAssign();
+        $renderer->assign($templateParams);
+        $result = trim($renderer->fetch('frontend/styleguide/component.tpl'));
+    } catch (\Exception $e) {
+        $result = 'Error: '.$e->getMessage();
+    }
+
+    if (!empty($params['assign'])) {
+        $template->assign($params['assign'], $result);
         return '';
     } else {
         return $result;

@@ -120,7 +120,8 @@ class Styleguide extends Plugin
     public function addJavascriptFiles(\Enlight_Event_EventArgs $args)
     {
         return new ArrayCollection([
-            $this->getPath() . '/Resources/views/frontend/_public/src/js/prism.js'
+            $this->getPath() . '/Resources/views/frontend/_public/src/js/prism.js',
+            $this->getPath() . '/Resources/views/frontend/_public/src/js/styleguide.js',
         ]);
     }
 }

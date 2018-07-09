@@ -1,9 +1,7 @@
-@font-size-base: 14;
-
-
 .sg-styleguide {
   color: #333;
-  font-size: 16px;
+  padding-top: 64px;
+  padding-left: 16px;
 
   svg {
     max-width: 100%;
@@ -16,11 +14,60 @@
     border: 0;
     border-top: 1px solid #ccc;
   }
+
+  :not(pre) > code[class*="language-"],
+  pre[class*="language-"] {
+    background: #efefef;
+  }
+}
+
+.sg-h1,
+.sg-h2,
+.sg-p {
+  font-weight: 300;
+  font-family: Roboto,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI","Oxygen","Ubuntu","Cantarell","Open Sans",sans-serif
+}
+
+.sg-h1 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.sg-h2 {
+  font-size: 2rem;
+}
+
+.sg-h2 > a {
+  color: inherit;
+
+  &:hover,
+  &:focus {
+    color: inherit;
+  }
+}
+
+.sg-h2 > a:before {
+  content: '#';
+  margin-left: -1.5rem;
+  padding-right: 0.5rem;
+  color: #999;
+  font-size: 90%;
+}
+
+.sg-p {
+
+}
+
+.sg-mb {
+  margin-bottom: 2rem;
+}
+
+.sg-mt {
+  margin-top: 2rem;
 }
 
 .sg-styleguide__section {
-  border-top: 1px solid #ccc;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 
   > h2 {
     margin: 0;
@@ -29,17 +76,59 @@
   }
 }
 
+.sg-tabs {
+  display: flex;
+  flex-wrap: wrap;
 
-/**
- * Styleguide component
- */
-.sg-layout__item,
-.sg-component {
-  svg {
-    width: 3rem;
-    height: 3rem;
+  margin: 1.5rem 0 1.5rem -20px;
+  padding: 0;
+  list-style: none;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  > li {
+    flex: none;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  > li > a {
+    display: block;
+    text-align: center;
+    padding: 9px 20px;
+    color: #999;
+    border-bottom: 2px solid transparent;
+    font-size: 12px;
+    text-transform: uppercase;
+    transition: color .1s ease-in-out;
+    line-height: 20px;
+  }
+
+  .sg-active > a {
+    color: #222;
+    border-color: #000000;
   }
 }
+
+.sg-switch {
+  margin: 1.5rem 0 0 0;
+  padding: 0;
+  list-style: none;
+
+  > :not(.sg-active) {
+    display: none;
+  }
+}
+
+
 .sg-component__code,
 .sg-component__component {
   margin-bottom: 1rem;
@@ -53,25 +142,51 @@
   }
 }
 
-.sg-component__preview {
+.sg-preview {
+  margin: 0.25rem 0;
 
-
+  &--flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
-
 
 .sg-component__doc {
   font-size: 14px;
+  padding: 16px 4px;
+
   p, pre {
     margin-top: 0;
     margin-bottom: 0;
   }
 
+  :not(pre) > code[class*="language-"],
+  pre[class*="language-"] {
+    background: transparent;
+  }
+
   pre {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.375rem;
+    padding: 0;
+  }
+
+  p, code, pre {
+    font-size: inherit;
+  }
+
+  ul {
+    margin-left: 0.5rem;
+    padding-left: 0;
+  }
+
+  li {
+    list-style: none;
+
+    &:before {
+      content: '– ';
+    }
   }
 }
-
-
 
 /*
 Section styling (required)

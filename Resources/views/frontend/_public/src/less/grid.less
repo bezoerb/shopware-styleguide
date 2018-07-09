@@ -87,13 +87,17 @@
 
 .sg-layout__item {
   box-sizing: border-box; /* [1] */
-  display: inline-block; /* [2] */
+  display: inline-flex; /* [2] */
   vertical-align: top; /* [3] */
   width: 100%; /* [4] */
   .unitize(padding-left, 24); /* [5] */
 
   .unitize(font-size, 16); /* [6] */
   font-size: 1rem;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 

@@ -1,6 +1,5 @@
 <?php
 
-use Styleguide\Service\Parsedown;
 use Styleguide\Struct\Component;
 
 /**
@@ -24,7 +23,7 @@ function smarty_function_styleguide_doc($params, $template)
 
     //$searchRegex = '/^(\{\*\*(.*[\r\n])*\s+\*\})/';
     $searchRegex = '/^([\/\{]\*\*([\S\s]*)\s+\*[\/\}])/U';
-    $replaceRegex = '/^\s*[\/\{]?\*+\}?\ *\/?/m';
+    $replaceRegex = '/^\s*[\/\{]?\*+\}?\ *\/?(\r\n|\s|\})/m';
 
     $searchAltRegex = '/^\s*<!--\s*([\S\s]*)-->/U';
     $replaceAltRegex = '/^\ */m';
@@ -70,10 +69,14 @@ function smarty_function_styleguide_doc($params, $template)
         }
     }
 
+
     // remove @returns @param @throws as we only want the description
     $doc = preg_replace('/(^|[\r\n])\s*@param.*($|[\r\n])/m', '$2', $doc);
     $doc = preg_replace('/(^|[\r\n])\s*@return.*($|[\r\n])/m', '$2', $doc);
     $doc = preg_replace('/(^|[\r\n])\s*@throw.*($|[\r\n])/m', '$2', $doc);
+
+    // fix missing line breaks
+    $doc = preg_replace('/(\s*[*,-].*[\r\n])(\s*[^\*])/m', '$1'.PHP_EOL.'$2', $doc);
 
 
     $parsedown = new Parsedown();

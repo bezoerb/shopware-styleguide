@@ -1,8 +1,15 @@
 <?php
 
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Theme\Compiler;
+use Shopware\Components\Theme\Inheritance;
+use Shopware\Components\Theme\LessCompiler;
 use Shopware\Components\Theme\Service;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Styleguide\Service\StyleguideService;
+use Styleguide\Service\ThemeConfigService;
 use Styleguide\Struct\Component;
 
 /**
@@ -14,109 +21,57 @@ class Shopware_Controllers_Frontend_Styleguide extends Enlight_Controller_Action
 {
     /**
      * index action
+     * @throws Exception
      */
     public function indexAction()
     {
-        $this->View()->assign('components', $this->getComponents());
+        $request = $this->Request();
+        $category = $request->getParam('category');
+        $file = $request->getParam('file');
+        $view = $this->View();
+        $components = $this->getStyleguideService()->getComponents();
+        $sMainMenu = $this->getStyleguideService()->getMainCategories($components);
+        $view->assign('sMainMenu', $sMainMenu);
 
-        /** @var Service $themeService */
-        $themeService = $this->container->get('theme_service');
-
-        $template = $this->getTemplate();
-
-        $configs = $themeService->getConfig($template);
-        $colors = [];
-        $fonts = [];
-
-        foreach ($configs as $config) {
-            if (preg_match('/^#[\dA-F]{3,6}/i', $config['defaultValue']) && empty($colors[$config['defaultValue']])) {
-                $colors[$config['defaultValue']] = $config['fieldLabel'];
-            }
-
-            if ($config['name'] == 'font-base-stack') {
-                $fonts[$config['defaultValue']] = $config['fieldLabel'];
-            }
+        if ($category || $file) {
+            $components = array_filter($components, function($component) use ($category, $file) {
+                return $component->getGroup() == $category && (!$file || strtolower($file) == strtolower($component->getName()));
+            });
         }
 
-        $this->View()->assign('colors', $colors);
-        $this->View()->assign('fonts', $fonts);
+        $view->assign('components', $components);
 
-        // check theme responsive inheritance
-        /** @var \Enlight_Template_Manager $template */
-        $template = $this->container->get('template');
-        $extendsResponsive = count(array_filter($template->getTemplateDir(), function($dir) {
-            return strpos($dir, 'themes/Frontend/Responsive/') !== false;
-        })) != 0;
-
-        $this->View()->assign('extendsResponsive', $extendsResponsive);
+        $themeConfig = $this->getThemeConfigService();
+        $view->assign('themeConfig', $themeConfig->getConfig());
+        $view->assign('themeInheritance', $themeConfig->getInheritancePath());
+        $view->assign('colors', $themeConfig->getColors());
+        $view->assign('fonts', $themeConfig->getFonts());
     }
 
     /**
-     * @return array
-     */
-    protected function getComponents()
-    {
-        $components = [];
-
-        /** @var \Enlight_Template_Manager $template */
-        $template = $this->container->get('template');
-
-        $directories = $template->getTemplateDir();
-        $directories[] = __DIR__.'/../../Resources/views/';
-
-        // loop from plugin over parent themes to active theme
-        foreach (array_reverse($directories) as $base) {
-            $basePath = $base.'frontend/_includes/styleguide';
-            if (!file_exists($basePath)) {
-                continue;
-            }
-
-            $dirIterator = new RecursiveDirectoryIterator($basePath);
-            $iterator = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::SELF_FIRST);
-
-            /** @var SplFileInfo $file */
-            foreach ($iterator as $file) {
-                if (!$file->isFile() || $file->getExtension() != 'tpl') {
-                    continue;
-                }
-
-                $path = preg_replace('#^.*/Resources/views/frontend#', 'frontend', $file->getPath());
-
-                $component = new Component();
-                $component->setName(preg_replace('/^\d+\-/','', $file->getBasename('.tpl')));
-                $component->setFile(sprintf('%s/%s', $path, $file->getBasename()));
-
-                $components[$file->getBasename()] = $component;
-            }
-        }
-
-        ksort($components);
-        return $components;
-    }
-
-    /**
-     * @return Template
+     * @return ModelManager
      * @throws Exception
      */
-    protected function getTemplate()
+    protected function getEntityManager()
     {
-        $modelManager = $this->container->get('shopware.model_manager');
-        $repo = $modelManager->getRepository('Shopware\Models\Shop\Shop');
+        return $this->container->get('shopware.model_manager');
+    }
 
-        /** @var \Doctrine\ORM\QueryBuilder $builder */
-        $builder    = $repo->createQueryBuilder('s');
-        $builder->leftJoin('s.template', 't');
-        $builder->where('s.default = 1');
+    /**
+     * @return ThemeConfigService
+     * @throws Exception
+     */
+    protected function getThemeConfigService()
+    {
+        return $this->container->get('styleguide.service.config.theme');
+    }
 
-        /** @var Shop[] $data */
-        $shops = $builder->getQuery()->execute();
-
-        if (!count($shops)) {
-            throw new \Exception('No default shop found');
-        }
-
-        /** @var Shop $shop */
-        $shop = array_shift($shops);
-        return $shop->getTemplate();
+    /**
+     * @return StyleguideService
+     * @throws Exception
+     */
+    protected function getStyleguideService()
+    {
+        return $this->container->get('styleguide.service.styleguide');
     }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Config -->
+        <service id="styleguide.service.config.theme" class="Styleguide\Service\ThemeConfigService">
+            <argument type="service" id="theme_compiler"/>
+            <argument type="service" id="oyejorge_compiler_lib"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="shopware.model_manager"/>
+            <argument type="service" id="models_metadata_cache"/>
+        </service>
+
+        <service id="styleguide.service.styleguide" class="Styleguide\Service\StyleguideService">
+            <argument type="service" id="template" />
+            <argument type="service" id="models_metadata_cache" />
+        </service>
+
+        <!-- Subscriber -->
+        <service id="styleguide.subscriber.unknownroute" class="Styleguide\Subscriber\UnknownRouteSubscriber">
+            <tag name="shopware.event_subscriber"/>
+            <call method="setStyleguideService">
+                <argument type="service" id="styleguide.service.styleguide"/>
+            </call>
+        </service>
+    </services>
+</container>
