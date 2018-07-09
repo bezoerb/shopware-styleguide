@@ -1,23 +1,28 @@
 .sg-styleguide {
   color: #333;
   padding-top: 64px;
-  padding-left: 16px;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
 
   svg {
     max-width: 100%;
   }
 
   hr {
-
     height: 1px;
     margin: 0;
     border: 0;
     border-top: 1px solid #ccc;
   }
 
-  :not(pre) > code[class*="language-"],
-  pre[class*="language-"] {
+  :not(pre) > code[class*='language-'],
+  pre[class*='language-'] {
     background: #efefef;
+  }
+
+  @media (min-width: 48rem) {
+    padding-left: 28px;
+    padding-right: 28px;
   }
 }
 
@@ -25,7 +30,8 @@
 .sg-h2,
 .sg-p {
   font-weight: 300;
-  font-family: Roboto,-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI","Oxygen","Ubuntu","Cantarell","Open Sans",sans-serif
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
+    'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', sans-serif;
 }
 
 .sg-h1 {
@@ -35,6 +41,7 @@
 
 .sg-h2 {
   font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 .sg-h2 > a {
@@ -48,14 +55,19 @@
 
 .sg-h2 > a:before {
   content: '#';
-  margin-left: -1.5rem;
-  padding-right: 0.5rem;
+  margin-left: -1.2rem;
+  padding-right: 0.2rem;
   color: #999;
   font-size: 90%;
+
+  @media (min-width: 48rem) {
+    margin-left: -1.5rem;
+    padding-right: 0.5rem;
+  }
 }
 
 .sg-p {
-
+  margin-bottom: 1.5rem;
 }
 
 .sg-mb {
@@ -86,7 +98,7 @@
   position: relative;
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 20px;
@@ -108,7 +120,7 @@
     border-bottom: 2px solid transparent;
     font-size: 12px;
     text-transform: uppercase;
-    transition: color .1s ease-in-out;
+    transition: color 0.1s ease-in-out;
     line-height: 20px;
   }
 
@@ -128,18 +140,9 @@
   }
 }
 
-
 .sg-component__code,
 .sg-component__component {
   margin-bottom: 1rem;
-}
-
-.sg-component__doc {
-  ul, ol {
-    padding-left: 1.5rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
 }
 
 .sg-preview {
@@ -155,13 +158,22 @@
   font-size: 14px;
   padding: 16px 4px;
 
-  p, pre {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-top: 0;
+  }
+
+  p,
+  pre {
     margin-top: 0;
     margin-bottom: 0;
   }
 
-  :not(pre) > code[class*="language-"],
-  pre[class*="language-"] {
+  :not(pre) > code[class*='language-'],
+  pre[class*='language-'] {
     background: transparent;
   }
 
@@ -170,7 +182,9 @@
     padding: 0;
   }
 
-  p, code, pre {
+  p,
+  code,
+  pre {
     font-size: inherit;
   }
 
@@ -186,6 +200,18 @@
       content: '– ';
     }
   }
+
+  ul,
+  ol {
+    padding-left: 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.sg-switch .sg-component__doc {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /*
@@ -193,7 +219,6 @@ Section styling (required)
 Removes hidden sections from the keychain.
 Only used when JavaScript is available.
 */
-[role="tabpanel"][aria-hidden="true"] {
+[role='tabpanel'][aria-hidden='true'] {
   display: none;
 }
-
