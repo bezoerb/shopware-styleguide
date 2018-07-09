@@ -1,5 +1,5 @@
 {
-  "name": "bezoerb/styleguide",
+  "name": "bezoerb/shopware-styleguide",
   "type": "shopware-plugin",
   "description": "The styleguide plugin allows you to easily add a living styleguide for your shopware installation",
   "license": "MIT",
