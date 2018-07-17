@@ -40,7 +40,6 @@ class Shopware_Controllers_Frontend_Styleguide extends Enlight_Controller_Action
         }
 
         $view->assign('components', $components);
-
         $themeConfig = $this->getThemeConfigService();
         $view->assign('themeConfig', $themeConfig->getConfig());
         $view->assign('themeInheritance', $themeConfig->getInheritancePath());
