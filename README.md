@@ -32,8 +32,8 @@ If you your theme extends the shopware responsive theme the page should look som
 
 ### Styleguide components
 
-This plugin will pick up all files provided in `THEME/frontend/_includes/styleguide/**/*.tpl`
-It also hijacks the `{$sMainCategories}` template assign to add a menu entry for each folder inside THEME/frontend/\_includes/styleguide/`
+This plugin will pick up all files provided in `THEME/frontend/_includes/styleguide/**/*.tpl`<br>
+It also hijacks the `{$sMainCategories}` template assign to add a menu entry for each folder inside `THEME/frontend/\_includes/styleguide/`
 
 Every file inside these folders should represent one section in your styleguide.
 
