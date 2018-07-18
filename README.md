@@ -11,7 +11,7 @@ Easily add a living styleguide for your [`shopware`](https://github.com/shopware
 This method requires shopware to be installed by composer as well. See this guide for details: [developers-guide/shopware-composer](https://developers.shopware.com/developers-guide/shopware-composer/)
 
 ```
-composer require bezoerb/shopware-styleguide:0.1.0
+composer require bezoerb/shopware-styleguide
 ```
 
 ### Alternative installation method
