@@ -1,6 +1,6 @@
 # Shopware Styleguide
 
-[![Software License][license-image]][license-url] ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
+[![Software License][license-image]][license-url]
 
 Easily add a living styleguide for your [`shopware`](https://github.com/shopware/shopware) project
 
