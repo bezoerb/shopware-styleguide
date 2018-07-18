@@ -43,7 +43,7 @@ Example:
 {extends file="frontend/styleguide/section.tpl"}
 
 {block name="frontend_styleguide_section_title"}
-  Typography
+  Fonts
 {/block}
 
 {block name="frontend_styleguide_section_description"}
@@ -51,7 +51,7 @@ Example:
 {/block}
 
 {block name="frontend_styleguide_section_content"}
-	Main content...
+  Main content...
 {/block}
 ```
 
