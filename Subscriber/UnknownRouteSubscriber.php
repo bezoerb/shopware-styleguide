@@ -3,11 +3,7 @@
 namespace Styleguide\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
-use SatisfyerCore\Service\BlogHandler;
-use SatisfyerCore\Service\PressUserStorage;
-use Shopware\Components\Plugin\CachedConfigReader;
 use Styleguide\Service\StyleguideService;
-use Trbo\Service\ConversionService;
 
 class UnknownRouteSubscriber implements SubscriberInterface
 {
