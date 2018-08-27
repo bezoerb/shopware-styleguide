@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ben
- * Date: 27.09.17
- * Time: 00:23
- */
-
 namespace Styleguide\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Struct;

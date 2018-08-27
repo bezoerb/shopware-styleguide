@@ -1,4 +1,3 @@
-
 /* ==========================================================================
    #FLAG
    ========================================================================== */
@@ -27,7 +26,6 @@
   }
 }
 
-
 /**
  * Items within a flag object. There should only ever be one of each.
  *
@@ -39,7 +37,6 @@
   display: table-cell;
   vertical-align: middle; /* [1] */
 }
-
 
 /**
  * Flag images have a space between them and the body of the object.
@@ -67,9 +64,7 @@
   > img {
     max-width: none; /* [1] */
   }
-
 }
-
 
 /**
  * The container for the main content of the flag object.
@@ -99,7 +94,7 @@
       right: 0;
       bottom: 0;
       height: 100%;
-      content:'';
+      content: '';
       border-right: 1px solid #ccc;
       top: 0;
     }
@@ -114,22 +109,15 @@
  */
 
 .sg-flag--top {
-
   > .sg-flag__img,
   > .sg-flag__body {
     vertical-align: top;
   }
-
 }
 
-
 .sg-flag--bottom {
-
   > .sg-flag__img,
   > .sg-flag__body {
     vertical-align: bottom;
   }
-
 }
-
-

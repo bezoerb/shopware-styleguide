@@ -9,7 +9,7 @@ use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Components\Theme\LessDefinition;
 
 /**
- * Core plugin that manages all customizing needed for Satisfyer shop
+ * Styleguide plugin
  */
 class Styleguide extends Plugin
 {

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ben
- * Date: 09.04.18
- * Time: 05:34
- */
-
 namespace Styleguide\Service;
 
 
