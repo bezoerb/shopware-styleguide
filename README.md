@@ -67,7 +67,7 @@ This Plugin includes some helpers and templates to help you get started.
 
 Place any markup in between and you'll get a preview.<br/> You can add a HTML comment at the beginning to provide some documentation (markdown supported).
 
-![example](./doc/styleguide_html.png)
+![example](./doc/styleguide_section.gif)
 
 ### styleguide_function
 
