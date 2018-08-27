@@ -39,6 +39,10 @@ document.addEventListener('click', function (e) {
     var targets = target && target.closest('.sg-switch');
     var currentTarget = targets && targets.querySelector('.sg-active');
 
+    if (target.classList.contains('sg-active')) {
+      return;
+    }
+    
     tab.classList.add('sg-active');
     tab.setAttribute('aria-expanded', true);
     if (currentTab) {
