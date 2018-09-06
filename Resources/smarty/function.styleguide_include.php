@@ -32,7 +32,7 @@ function smarty_function_styleguide_include($params, $template)
 
     // check for single arguments array and make an array of argument arrays
     $arguments = $params['arguments'];
-    if (array_values($arguments) !== $arguments) {
+    if (array_values($arguments) !== $arguments || !count($arguments)) {
         $arguments = [$arguments];
     }
 
