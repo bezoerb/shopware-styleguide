@@ -17,6 +17,13 @@ composer require bezoerb/shopware-styleguide
 ### Alternative installation method
 
 If you don't want to use composer you'll have to download the latest [release](https://github.com/bezoerb/shopware-styleguide/releases) and copy the files to `custom/plugins/Styleguide`.
+After that you'll need to install the plugin dependencies via composer.
+
+```
+cd custom/plugins/Styleguide
+composer install
+```
+
 This plugin can't be found at the shopware plugin registry yet.
 
 ## Getting started

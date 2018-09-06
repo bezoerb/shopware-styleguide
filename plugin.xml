@@ -11,4 +11,16 @@
     <changelog version="0.1.0">
         <changes lang="en">Initial version.</changes>
     </changelog>
+    <changelog version="1.0.0">
+        <changes lang="en">First stable release</changes>
+    </changelog>
+    <changelog version="1.0.1">
+        <changes lang="en">Minor bugfixes</changes>
+    </changelog>
+    <changelog version="1.0.2">
+        <changes lang="en">Minor bugfixes</changes>
+    </changelog>
+    <changelog version="1.0.3">
+        <changes lang="en">Minor bugfixes</changes>
+    </changelog>
 </plugin>
