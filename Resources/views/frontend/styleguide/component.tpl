@@ -28,8 +28,8 @@
       {if $preview}
         <li class="sg-active" id="{$uid}-preview">
           {block name="frontend_styleguide_component_preview"}
-            <div class="sg-preview {if $variation && $variation|is_array} sg-preview--{' sg-preview--'|implode:$variation}{elseif $variation} sg-preview--{$variation}{/if}"">
-              {if $preview|is_array}{foreach $preview as $p}{$p}{/foreach}{else}{$preview}{/if}
+            <div class="sg-preview {if $variation && $variation|is_array} sg-preview--{' sg-preview--'|implode:$variation}{elseif $variation} sg-preview--{$variation}{/if}{if $preview|is_array} sg-preview--stack{/if}">
+              {if $preview|is_array}{foreach $preview as $p}<div class="sg-preview__item">{$p}</div>{/foreach}{else}<div class="sg-preview__item">{$preview}</div>{/if}
             </div>
           {/block}
         </li>
