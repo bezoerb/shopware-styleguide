@@ -2,6 +2,81 @@
    #LAYOUT
    ========================================================================== */
 
+@xs: 0;
+@xs-max: 25.8125em;
+@sm: 25.875em;
+@sm-max: 47.9375em;
+@md: 48em;
+@md-max: 63.9375em;
+@lg: 64em;
+@lg-max: 78.6875em;
+@xl: 78.75em;
+
+// Without Breakpoints
+.generate-styleguide-widths(@fractions: 0, @breakpoint: null) when (@breakpoint = null) {
+  .i-loop (@i) when (@i > 0) {
+    .j-loop (@j) when (@j > 0) {
+      .sg-@{j}\/@{i} {
+        width: (@j / @i) * 100% !important;
+      }
+
+      // Build a class in the format `.u-push-1/2`.
+      //.u-push-@{j}\/@{i} {
+      //  position: relative !important;
+      //  right: auto !important; /* [1] */
+      //  left: (@j / @i) * 100% !important;
+      //}
+
+      // Build a class in the format `.u-pull-5/6`.
+      //.u-pull-@{j}\/@{i} {
+      //  position: relative !important;
+      //  right: (@j / @i) * 100% !important;
+      //  left: auto !important; /* [1] */
+      //}
+      .j-loop(@j - 1);
+    }
+
+    .j-loop(@i);
+    .i-loop(@i - 1);
+  }
+
+  .i-loop(@fractions);
+}
+
+// Default all the other breakpoints
+.generate-styleguide-widths(@fractions: 0, @breakpoint: null) when (default()) {
+  @media (min-width: @@breakpoint) {
+    .i-loop (@i) when (@i > 0) {
+      .j-loop (@j) when (@j > 0) {
+        // Build class in the format `.u-1/2[@<breakpoint>]`
+        .sg-@{j}\/@{i}\@@{breakpoint} {
+          width: (@j / @i) * 100% !important;
+        }
+
+        // Build a class in the format `.u-push-1/2[@<breakpoint>]`.
+        //.u-push-@{j}\/@{i}\@@{breakpoint} {
+        //  position: relative !important;
+        //  right: auto !important; /* [1] */
+        //  left: (@j / @i) * 100% !important;
+        //}
+
+        // Build a class in the format `.u-pull-5/6[@<breakpoint>]`.
+        //.u-pull-@{j}\/@{i}\@@{breakpoint} {
+        //  position: relative !important;
+        //  right: (@j / @i) * 100% !important;
+        //  left: auto !important; /* [1] */
+        //}
+        .j-loop(@j - 1);
+      }
+
+      .j-loop(@i);
+      .i-loop(@i - 1);
+    }
+
+    .i-loop(@fractions);
+  }
+}
+
 .sg-layout {
   display: block; /* [1] */
   margin: 0; /* [2] */
@@ -26,30 +101,38 @@
   align-items: center;
 }
 
-.u-1\/8 {
-  width: (100/8%) !important;
+.generate-styleguide-widths(12);
+.generate-styleguide-widths(12, md);
+
+
+
+
+.sg-flex {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.u-1\/12 {
-  width: (100/12%) !important;
+.sg-flex--align-start {
+  align-items: flex-start;
 }
 
-.u-2\/12 {
-  width: (100/6%) !important;
+.sg-flex--align-center {
+  align-items: center;
 }
 
-.u-1\/3 {
-  width: (100/3%) !important;
+.sg-flex--align-end {
+  align-items: flex-end;
 }
 
-.u-1\/1\@mobile {
-  @media (max-width: 767px) {
-    width: 100% !important;
-  }
+.sg-flex--justify-start {
+  justify-content: flex-start;
 }
 
-.u-1\/4\@mobile {
-  @media (max-width: 767px) {
-    width: (100/4%) !important;
-  }
+.sg-flex--justify-center {
+  justify-content: center;
+}
+
+.sg-flex--justify-end {
+  justify-content: flex-end;
 }

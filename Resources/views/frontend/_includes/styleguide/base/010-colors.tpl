@@ -9,14 +9,14 @@
 {/block}
 
 {block name="frontend_styleguide_section_content"}
-  <div class="sg-layout">
+  <div class="sg-layout sg-flex sg-flex--align-start sg-flex--justify-center">
     {foreach $colors as $color => $name}
-      <div class="sg-layout__item u-1/12  u-1/4@mobile">
+      <div class="sg-layout__item" style="width: 130px; flex: 0 0 130px">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <rect x="0" y="0" width="100" height="100" stroke="#979797" fill="{$color}"/>
         </svg>
         <p style="text-align: center">{$color}<br>
-          <small>{$name}</small>
+          <small><nobr>@{$name}</nobr></small>
         </p>
       </div>
     {/foreach}

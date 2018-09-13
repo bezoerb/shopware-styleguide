@@ -32,7 +32,7 @@
     {foreach $fonts as $font => $name}
       <div style="font-family: {$font|replace:'"':'\''}">
         <div class="sg-flag  sg-flag--fixed">
-          <div class="sg-flag__img u-1/12 u-1/1@mobile">
+          <div class="sg-flag__img sg-1/1 sg-1/12@md">
             <div style="font-size: 100px">Aa</div>
           </div>
           <div class="sg-flag__body">
@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="sg-flag sg-flag--fixed">
-          <div class="sg-flag__img u-1/12 u-1/1@mobile">
+          <div class="sg-flag__img sg-1/1 sg-1/12@md">
             <div style="font-size: 100px"><strong>Aa</strong></div>
           </div>
           <div class="sg-flag__body">
@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="sg-flag sg-flag--fixed">
-          <div class="sg-flag__img u-1/12 u-1/1@mobile">
+          <div class="sg-flag__img sg-1/1 sg-1/12@md">
             <div style="font-size: 100px"><em>Aa</em></div>
           </div>
           <div class="sg-flag__body">

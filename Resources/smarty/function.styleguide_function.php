@@ -21,6 +21,9 @@ function smarty_function_styleguide_function($params, $template)
         'variation' => '',
         'arguments' => [],
         'assign'    => false,
+        'grid'      => '',
+        'align'      => '',
+        'justify'      => '',
     ], $params);
 
     $function = 'smarty_function_'.$params['name'];
@@ -37,9 +40,8 @@ function smarty_function_styleguide_function($params, $template)
         $arguments = [$arguments];
     }
 
-
     // params for output tpl
-    $templateParams = ['variation' => $params['variation']];
+    $templateParams = ['variation' => $params['variation'],'grid' => $params['grid'], 'align' => $params['align'], 'justify' => $params['justify']];
 
     // prepare smarty output
     if ($params['smarty']) {

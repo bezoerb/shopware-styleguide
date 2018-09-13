@@ -1,4 +1,11 @@
 {namespace name="frontend/styleguide"}
+{if $grid && $grid|is_array}
+  {$gridClass = "sg-{' sg-'|implode:$grid}"}
+{elseif $grid}
+  {$grid = ' '|explode:$grid}
+  {$grid = $grid|array_filter}
+  {$gridClass = "sg-{' sg-'|implode:$grid}"}
+{/if}
 <div class="sg-component">
   {$uid = 'sg-'|uniqid}
   {if $preview or $html or $source}
@@ -29,7 +36,13 @@
         <li class="sg-active" id="{$uid}-preview">
           {block name="frontend_styleguide_component_preview"}
             <div class="sg-preview {if $variation && $variation|is_array} sg-preview--{' sg-preview--'|implode:$variation}{elseif $variation} sg-preview--{$variation}{/if}{if $preview|is_array} sg-preview--stack{/if}">
-              {if $preview|is_array}{foreach $preview as $p}<div class="sg-preview__item">{$p}</div>{/foreach}{else}<div class="sg-preview__item">{$preview}</div>{/if}
+              {if $grid}<div class="sg-layout sg-flex{if $align} sg-flex--align-{$align}{/if}{if $justify} sg-flex--justify-{$justify}{/if}">{/if}
+              {if $preview|is_array}
+                {foreach $preview as $p}{if $grid}<div class="sg-layout__item {$gridClass}">{/if}<div class="sg-preview__item">{$p}</div>{if $grid}</div>{/if}{/foreach}
+              {else}
+                {if $grid}<div class="sg-layout__item {$gridClass}">{/if}<div class="sg-preview__item">{$preview}</div>{if $grid}</div>{/if}
+              {/if}
+              {if $grid}</div>{/if}
             </div>
           {/block}
         </li>
@@ -37,26 +50,34 @@
       {if $source}
         <li{if !$preview} class="sg-active"{/if} id="{$uid}-smarty">
           <div class="sg-component__code-smarty">
+            {*{if $grid}<div class="sg-layout">{/if}*}
             {if $source|is_array}
               {foreach $source as $s}
                 <pre><code class="language-smarty">{$s}</code></pre>
+                {*{if $grid}<div class="sg-layout__item {$gridClass}">{/if}<pre><code class="language-smarty">{$s}</code></pre>{if $grid}</div>{/if}*}
               {/foreach}
             {else}
               <pre><code class="language-smarty">{$source}</code></pre>
+              {*{if $grid}<div class="sg-layout__item {$gridClass}">{/if}<pre><code class="language-smarty">{$source}</code></pre>{if $grid}</div>{/if}*}
             {/if}
+            {*{if $grid}</div>{/if}*}
           </div>
         </li>
       {/if}
       {if $html}
       <li{if !$preview && !$source} class="sg-active"{/if} id="{$uid}-markup">
         <div class="sg-component__code-html">
+          {*{if $grid}<div class="sg-layout">{/if}*}
           {if $html|is_array}
             {foreach $html as $h}
               <pre><code class="language-markup">{$h}</code></pre>
+              {*{if $grid}<div class="sg-layout__item {$gridClass}">{/if}<pre><code class="language-markup">{$h}</code></pre>{if $grid}</div>{/if}*}
             {/foreach}
           {else}
             <pre><code class="language-markup">{$html}</code></pre>
+            {*{if $grid}<div class="sg-layout__item {$gridClass}">{/if}<pre><code class="language-markup">{$html}</code></pre>{if $grid}</div>{/if}*}
           {/if}
+          {*{if $grid}</div>{/if}*}
         </div>
       </li>
       {/if}

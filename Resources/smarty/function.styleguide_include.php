@@ -22,6 +22,9 @@ function smarty_function_styleguide_include($params, $template)
         'smarty'    => true,
         'arguments' => [],
         'assign'    => false,
+        'grid'      => '',
+        'align'      => '',
+        'justify'      => '',
     ], $params);
 
     if ($params['file'] instanceof Component) {
@@ -37,7 +40,7 @@ function smarty_function_styleguide_include($params, $template)
     }
 
     // params for output tpl
-    $templateParams = [];
+    $templateParams = ['grid' => $params['grid'], 'align' => $params['align'], 'justify' => $params['justify']];
 
     // prepare smarty output
     if ($params['smarty']) {
