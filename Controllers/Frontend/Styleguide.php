@@ -1,16 +1,9 @@
 <?php
 
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Theme\Compiler;
-use Shopware\Components\Theme\Inheritance;
-use Shopware\Components\Theme\LessCompiler;
-use Shopware\Components\Theme\Service;
-use Shopware\Models\Shop\Shop;
-use Shopware\Models\Shop\Template;
 use Styleguide\Service\StyleguideService;
 use Styleguide\Service\ThemeConfigService;
-use Styleguide\Struct\Component;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Styleguide controller
@@ -26,6 +19,9 @@ class Shopware_Controllers_Frontend_Styleguide extends Enlight_Controller_Action
     public function indexAction()
     {
         $request = $this->Request();
+        if ($request->getParam('flush-cache')) {
+            $this->flushCache();
+        }
         $category = $request->getParam('category');
         $file = $request->getParam('file');
         $view = $this->View();
@@ -72,5 +68,12 @@ class Shopware_Controllers_Frontend_Styleguide extends Enlight_Controller_Action
     protected function getStyleguideService()
     {
         return $this->container->get('styleguide.service.styleguide');
+    }
+
+    protected function flushCache()
+    {
+        /** @var Cache $cache */
+        $cache = $this->container->get('models_metadata_cache');
+        return $cache->deleteAll();
     }
 }

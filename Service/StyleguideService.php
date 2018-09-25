@@ -2,6 +2,7 @@
 namespace Styleguide\Service;
 
 
+use DirectoryIterator;
 use Doctrine\Common\Cache\Cache;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -65,15 +66,25 @@ class StyleguideService
     {
         $components = [];
 
+        $cacheTtl = 86400;
         $cacheKey = 'Styleguide/Components';
-        $data = $this->cache->fetch($cacheKey);
+        $cacheTimeKey = 'Styleguide/Components/Time';
 
+        // check last modified time
+        $directories = $this->template->getTemplateDir();
+        $directories[] = __DIR__.'/../Resources/views/';
+
+        $mtime = $this->getMtime($directories);
+        $time = $this->cache->fetch($cacheTimeKey);
+        if ($time && $time < $mtime) {
+            $this->cache->delete($cacheTimeKey);
+            $this->cache->delete($cacheKey);
+        }
+
+        $data = $this->cache->fetch($cacheKey);
         if (!empty($data)) {
             return $data;
         }
-
-        $directories = $this->template->getTemplateDir();
-        $directories[] = __DIR__.'/../Resources/views/';
 
         // loop from plugin over parent themes to active theme
         foreach (array_reverse($directories) as $base) {
@@ -108,7 +119,35 @@ class StyleguideService
 
         ksort($components);
 
-        $this->cache->save($cacheKey, $components, 3600);
+        $this->cache->save($cacheTimeKey, time(), $cacheTtl);
+        $this->cache->save($cacheKey, $components, $cacheTtl);
         return $components;
+    }
+
+    /**
+     * Check directory mtime
+     *
+     * @param array $directories
+     * @return int
+     */
+    protected function getMtime($directories = [])
+    {
+        $mtimes = [];
+        foreach (array_reverse($directories) as $base) {
+            $basePath = $base.'frontend/_includes/styleguide';
+            if (!file_exists($basePath)) {
+                continue;
+            }
+
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($basePath));
+            /** @var DirectoryIterator $fileinfo */
+            foreach ($iterator as $fileinfo) {
+                if ($fileinfo->isDir()) {
+                    $mtimes[] = $fileinfo->getMTime();
+                }
+            }
+        }
+
+        return max($mtimes);
     }
 }
