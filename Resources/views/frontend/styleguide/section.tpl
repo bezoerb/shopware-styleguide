@@ -6,7 +6,7 @@
     {/capture}
     {if $title}
       {$href = $title|lower|regex_replace:'/[^\w\d]+/ ':''}
-      <h2 id="{$href}" class="sg-h2"><a href="#{$href}">{$title}</a></h2>
+      <h2 id="{$href}" class="sg-h2"><a href="#{$href}">{$title|trim}</a></h2>
     {/if}
     {capture assign="copy"}
       {block name="frontend_styleguide_section_description"}{/block}

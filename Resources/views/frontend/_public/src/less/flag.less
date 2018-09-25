@@ -49,12 +49,10 @@
   position: relative;
   width: 1px; /* [1] */
   text-align: left;
-  .unitize(padding-right, 24);
-  .unitize(padding-left, 24);
 
   @media (min-width: 48em) {
     text-align: right;
-    padding-left: 0;
+    .unitize(padding-right, 24);
   }
 
   /**
@@ -74,11 +72,6 @@
 
 .sg-flag__body {
   width: auto; /* [1] */
-  .unitize(padding-left, 24);
-  .unitize(padding-right, 24);
-  @media (min-width: 48rem) {
-    padding-right: 0;
-  }
 }
 
 .sg-flag--fixed {
