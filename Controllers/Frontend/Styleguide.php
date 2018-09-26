@@ -35,6 +35,7 @@ class Shopware_Controllers_Frontend_Styleguide extends Enlight_Controller_Action
             });
         }
 
+        $view->assign('category', $category);
         $view->assign('components', $components);
         $themeConfig = $this->getThemeConfigService();
         $view->assign('themeConfig', $themeConfig->getConfig());

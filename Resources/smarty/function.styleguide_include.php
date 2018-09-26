@@ -44,6 +44,7 @@ function smarty_function_styleguide_include($params, $template)
 
     // prepare smarty output
     if ($params['smarty']) {
+        $encoder = new \Riimu\Kit\PHPEncoder\PHPEncoder();
         $includeParams = [];
         $templateParams['source'] = [];
         foreach ($arguments as $index => $args) {
@@ -57,30 +58,28 @@ function smarty_function_styleguide_include($params, $template)
                 } elseif (is_numeric($value)) {
                     $includeParams[$index][] = $key.'='.$value;
                 } elseif (is_array($value)) {
-                    $val = var_export($value, true);
-                    $val = preg_replace('/array\s*\(\s*/', '[', $val);
-                    $val = preg_replace('/\s*,\s*\)/', ']', $val);
-
-                    $keys = array_keys($value);
-                    if (array_keys($keys) == $keys) {
-                        $val = preg_replace('/\d+\s*=>\s*/', '', $val);
-                    }
+                    $val = $encoder->encode($value, [
+                        'array.indent' => 2,
+                        'array.align' => true,
+                    ]);
                     $includeParams[$index][] = $key.'='.$val;
                 } else {
                     $includeParams[$index][] = $key.'=$'.$key;
                 }
             }
 
-            $templateParams['source'][] = sprintf(
+            $tmp = sprintf(
                 '{include file="%s" %s}',
                 $input,
                 implode(' ', $includeParams[$index])
             );
+            $templateParams['source'][] = str_replace(' ','&nbsp;',$tmp);
         }
     }
 
     // prepare preview output
     if ($params['preview'] || $params['html']) {
+        $indenter = new \Gajus\Dindent\Indenter(['indentation_character' => '  ']);
         $templateParams['preview'] = [];
         $templateParams['html'] = [];
         foreach ($arguments as $index => $args) {
@@ -99,7 +98,9 @@ function smarty_function_styleguide_include($params, $template)
             }
 
             if ($data && $params['html']) {
-                $markup = htmlentities(trim($data));
+                $pretty = $indenter->indent(trim($data));
+                $markup = htmlentities($pretty);
+                $markup = str_replace(' ','&nbsp;',$markup);
                 $templateParams['html'][] = $markup;
             }
         }

@@ -13,6 +13,8 @@
     "installer-name": "Styleguide"
   },
   "require": {
-    "erusev/parsedown": "^1.7"
+    "erusev/parsedown": "^1.7",
+    "riimu/kit-phpencoder": "^2.4",
+    "gajus/dindent": "^2.0"
   }
 }

@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">Styleguide</label>
 
-    <version>1.1.1</version>
+    <version>1.2.0</version>
     <link>https://www.sommerlaune.com/</link>
     <author>Ben Zörb</author>
     <compatibility minVersion="5.2.0"/>
@@ -28,5 +28,8 @@
     </changelog>
     <changelog version="1.1.1">
         <changes lang="en">Better cache handling</changes>
+    </changelog>
+    <changelog version="1.2.0">
+        <changes lang="en">Fixed indentation for markup and smarty</changes>
     </changelog>
 </plugin>
