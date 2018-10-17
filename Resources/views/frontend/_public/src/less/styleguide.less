@@ -169,6 +169,16 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  &--fullwidth {
+    width: 100vw;
+    margin-left: ~"calc(-50vw + 50%)";
+
+  }
+
+  .sg-preview__item {
+    width: 100%;
+  }
 }
 
 .sg-preview__item {
@@ -186,6 +196,13 @@
   h4,
   h5 {
     margin-top: 0;
+  }
+
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 0.25rem;
+    margin-top: 1.25rem;
   }
 
   p,

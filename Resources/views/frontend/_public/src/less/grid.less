@@ -103,6 +103,7 @@
 
 .generate-styleguide-widths(12);
 .generate-styleguide-widths(12, md);
+.generate-styleguide-widths(12, xl);
 
 
 
@@ -111,6 +112,10 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+}
+
+.sg-layout.sg-flex {
+  width: ~"calc(100% + 24px)";
 }
 
 .sg-flex--align-start {

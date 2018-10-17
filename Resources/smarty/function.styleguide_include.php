@@ -22,6 +22,7 @@ function smarty_function_styleguide_include($params, $template)
         'smarty'    => true,
         'arguments' => [],
         'assign'    => false,
+        'variation' => '',
         'grid'      => '',
         'align'      => '',
         'justify'      => '',
@@ -40,7 +41,7 @@ function smarty_function_styleguide_include($params, $template)
     }
 
     // params for output tpl
-    $templateParams = ['grid' => $params['grid'], 'align' => $params['align'], 'justify' => $params['justify']];
+    $templateParams = ['variation' => $params['variation'], 'grid' => $params['grid'], 'align' => $params['align'], 'justify' => $params['justify']];
 
     // prepare smarty output
     if ($params['smarty']) {
@@ -61,6 +62,7 @@ function smarty_function_styleguide_include($params, $template)
                     $val = $encoder->encode($value, [
                         'array.indent' => 2,
                         'array.align' => true,
+                        'string.escape' => true,
                     ]);
                     $includeParams[$index][] = $key.'='.$val;
                 } else {
